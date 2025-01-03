@@ -1,0 +1,29 @@
+type User {
+  id: ID!
+  email: String!
+  activities: [Activity!]!
+}
+
+type Activity {
+  id: ID!
+  userId: ID!
+  type: String!
+  date: String!
+  duration: Int!
+  createdAt: String!
+}
+
+input CreateActivityInput {
+  type: String!
+  date: String!
+  duration: Int!
+}
+
+type Query {
+  me: User!
+  activities(userId: ID!): [Activity!]!
+}
+
+type Mutation {
+  createActivity(input: CreateActivityInput!): Activity!
+} 

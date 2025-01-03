@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - .:/app:cached
+      - go-cache:/go
+      - ~/.gitconfig:/home/vscode/.gitconfig:ro
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/activity?sslmode=disable
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/firebase-credentials.json
+      - GOPATH=/go
+    ports:
+      - "8080:8080"
+      - "2345:2345" # for delve debugger
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    depends_on:
+      - db
+    user: vscode
+    init: true
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=activity
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  go-cache: 
