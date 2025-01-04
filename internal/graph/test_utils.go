@@ -24,7 +24,7 @@ func setupTestDB(t *testing.T) (*Resolver, func()) {
 	require.NoError(t, err)
 
 	// Auto migrate the test database
-	err = db.AutoMigrate(&models.User{}, &models.Activity{})
+	err = db.AutoMigrate(&models.User{}, &models.Activity{}, &models.Tag{})
 	require.NoError(t, err)
 
 	// Create a new resolver with the test database
@@ -56,12 +56,28 @@ func createTestUser(t *testing.T, db *gorm.DB) *models.User {
 	return user
 }
 
+// createTestTag creates a test tag in the database
+func createTestTag(t *testing.T, db *gorm.DB, userID string) *models.Tag {
+	tag := &models.Tag{
+		ID:        "test-tag-id",
+		Value:     "RUNNING",
+		CreatorID: userID,
+		CreatedAt: time.Now(),
+	}
+	err := db.Create(tag).Error
+	require.NoError(t, err)
+	return tag
+}
+
 // createTestActivity creates a test activity in the database
 func createTestActivity(t *testing.T, db *gorm.DB, userID string) *models.Activity {
+	// Create a test tag first
+	tag := createTestTag(t, db, userID)
+
 	activity := &models.Activity{
 		ID:        "test-activity-id",
 		UserID:    userID,
-		Type:      "RUNNING",
+		TagID:     tag.ID,
 		Date:      time.Now(),
 		Duration:  30,
 		CreatedAt: time.Now(),

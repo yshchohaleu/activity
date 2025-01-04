@@ -22,4 +22,6 @@ models:
   User:
     model: activity/internal/models.User
   Activity:
-    model: activity/internal/models.Activity 
+    model: activity/internal/models.Activity
+  Tag:
+    model: activity/internal/models.Tag 

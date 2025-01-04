@@ -3,7 +3,7 @@
 package graph
 
 type CreateActivityInput struct {
-	Type     string `json:"type"`
+	TagID    string `json:"tagId"`
 	Date     string `json:"date"`
 	Duration int    `json:"duration"`
 }

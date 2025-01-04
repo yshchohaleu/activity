@@ -2,28 +2,41 @@ type User {
   id: ID!
   email: String!
   activities: [Activity!]!
+  createdTags: [Tag!]!
+}
+
+type Tag {
+  id: ID!
+  value: String!
+  creatorId: ID!
+  createdAt: String!
+  creator: User!
 }
 
 type Activity {
   id: ID!
   userId: ID!
-  type: String!
+  tagId: ID!
   date: String!
   duration: Int!
   createdAt: String!
+  user: User!
+  tag: Tag!
 }
 
 input CreateActivityInput {
-  type: String!
+  tagId: ID!
   date: String!
   duration: Int!
 }
 
 type Query {
   me: User!
-  activities(userId: ID!): [Activity!]!
+  activities: [Activity!]!
+  tags: [Tag!]!
 }
 
 type Mutation {
   createActivity(input: CreateActivityInput!): Activity!
+  createTag(value: String!): Tag!
 } 
